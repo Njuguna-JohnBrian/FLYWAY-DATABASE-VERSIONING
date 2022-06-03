@@ -1,0 +1,4 @@
+CREATE TABLE public.users(
+    id INTEGER GENERATED ALWAYS AS IDENTITY,
+    username VARCHAR
+);

@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  flyway:
+    container_name: flyway-tech-talk
+    image: flyway/flyway:8.4.2
+    command: -url=${FLYWAY_URL} -user=${DATABASE_USER} -password=${DATABASE_PASSWORD} -connectRetries=5 migrate info
+    volumes:
+      - ${PWD}/sql_versions:/flyway/sql
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres-tech-talk
+    image: postgres:14.1-alpine 
+    restart: always 
+    ports:
+    - "5781:5432"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+  pgadmin:
+    container_name: pgadmin-tech-talk 
+    image: dpage/pgadmin4
+    restart: always 
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD}
+    ports: 
+      - "5050:80"
